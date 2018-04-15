@@ -90,29 +90,31 @@
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="101.0" prefWidth="340.0">
                <children>
-                  <VBox layoutX="80.0" layoutY="14.0" prefHeight="172.0" prefWidth="337.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="0.0">
+                  <VBox layoutX="80.0" layoutY="14.0" prefHeight="237.0" prefWidth="379.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="19.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Label text="Wpisz formułę w postaci CNF, użyj znaków ~ | &amp; ( ) oraz liter">
+                        <Label text="Wpisz formułę, użyj znaków ~ | &amp; ( ) = &gt; &lt; oraz liter">
                            <VBox.margin>
-                              <Insets bottom="5.0" left="25.0" right="5.0" top="20.0" />
+                              <Insets bottom="5.0" left="20.0" right="5.0" top="20.0" />
                            </VBox.margin>
                         </Label>
                         <TextArea fx:id="formula" minHeight="50.0" prefHeight="80.0" prefWidth="328.0">
                            <VBox.margin>
-                              <Insets bottom="15.0" left="25.0" right="5.0" top="20.0" />
+                              <Insets bottom="15.0" left="20.0" right="5.0" top="20.0" />
                            </VBox.margin>
                            <padding>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
                         </TextArea>
-                        <VBox alignment="TOP_RIGHT">
-                           <VBox.margin>
-                              <Insets bottom="15.0" left="15.0" right="5.0" top="5.0" />
-                           </VBox.margin>
+                        <HBox alignment="TOP_RIGHT">
                            <children>
+                              <Button fx:id="nnfBtn" mnemonicParsing="false" onAction="#toNnf" text="do NNF" />
+                              <Button fx:id="cnfBtn" mnemonicParsing="false" onAction="#toCnf" text="do CNF" />
                               <Button fx:id="resetBtn" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#reset" prefHeight="25.0" prefWidth="50.0" text="RESET" textAlignment="CENTER" />
                            </children>
-                        </VBox>
+                           <VBox.margin>
+                              <Insets left="20.0" right="5.0" />
+                           </VBox.margin>
+                        </HBox>
                         <VBox prefHeight="92.0" prefWidth="368.0">
                            <children>
                               <Text fx:id="lastFText" strokeType="OUTSIDE" strokeWidth="0.0" text="Ostatnio wpisana formuła:">
@@ -120,12 +122,12 @@
                                     <Font size="11.0" />
                                  </font>
                                  <VBox.margin>
-                                    <Insets left="25.0" top="20.0" />
+                                    <Insets left="20.0" top="20.0" />
                                  </VBox.margin>
                               </Text>
                               <TextField fx:id="lastFormula" editable="false">
                                  <VBox.margin>
-                                    <Insets left="25.0" top="5.0" />
+                                    <Insets left="20.0" top="5.0" />
                                  </VBox.margin>
                               </TextField>
                            </children>

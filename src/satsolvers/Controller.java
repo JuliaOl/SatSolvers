@@ -10,10 +10,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 
-import java.util.Random;
-
-
 public class Controller {
+    //satellite
+    //"A & ~(B | ~C)" nie cnf
+    //A & ~B & C cnf
 
     ObservableList<String> solversList = FXCollections.observableArrayList("MiniSAT",
             "Glucose", "SAT4J", "CleaneLing", "PBLib", "OpenWBO");
@@ -24,6 +24,10 @@ public class Controller {
     private Button resetBtn;
     @FXML
     private Button startBtn;
+    @FXML
+    private Button cnfBtn;
+    @FXML
+    private Button nnfBtn;
     @FXML
     private ChoiceBox solversBox;
     @FXML
@@ -60,21 +64,40 @@ public class Controller {
     }
 
     @FXML
+    private void toNnf(ActionEvent event) {
+        String input = formula.getText();
+        String nnf = model.toNNF(input);
+        formula.setText(input + "\n" + nnf);
+    }
+
+    @FXML
+    private void toCnf(ActionEvent event) {
+        String input = formula.getText();
+        String cnf = model.toCNF(input);
+        formula.setText(input + "\n" + cnf);
+    }
+
+    @FXML
     private void showResult(ActionEvent event) {
         String input = formula.getText();
-        Boolean b = model.process(input);
+        Boolean isRight = model.checkCNF(input);
+        String choice = solversBox.getValue().toString();
 
-        Random random = new Random();
-        boolean r = random.nextBoolean();
-        if (r == true) {
-            result.setText("Formuła jest spełnialna!");
-            result.setFill(Color.GREEN);
+        if (isRight) {
+            Boolean b = model.process(input, choice);
+            if (b) {
+                result.setText("Formuła jest spełnialna!");
+                result.setFill(Color.GREEN);
+            } else {
+                result.setText("Formuła jest niespełnialna!");
+                result.setFill(Color.RED);
+            }
+            lastFormula.setText(formula.getText());
+            lastFormula.setStyle("-fx-text-fill: gray");
         } else {
-            result.setText("Formuła jest niespełnialna!");
-            result.setFill(Color.RED);
+            result.setText("Wpisz poprawną formułę w CNF!");
+            result.setFill(Color.ORANGE);
         }
-        lastFormula.setText(formula.getText());
-        lastFormula.setStyle("-fx-text-fill: gray");
     }
 }
 
