@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.logicng.io.parsers.ParserException;
 
 
 public class Controller {
@@ -16,7 +17,8 @@ public class Controller {
     //A & ~B & C cnf
 
     ObservableList<String> solversList = FXCollections.observableArrayList("MiniSAT",
-            "Glucose", "SAT4J", "CleaneLing", "PBLib", "OpenWBO");
+             "CleaneLing", "GSATSolver", "WalkSATSolver");
+    // "Glucose", "SAT4J", "PBLib", "OpenWBO"
 
     @FXML
     private TextArea formula;
@@ -80,12 +82,17 @@ public class Controller {
     @FXML
     private void showResult(ActionEvent event) {
         String input = formula.getText();
-        Boolean isRight = model.checkCNF(input);
+        //Boolean isRight = model.checkCNF(input);
         String choice = solversBox.getValue().toString();
 
-        if (isRight) {
-            Boolean b = model.process(input, choice);
-            if (b) {
+        //if (isRight) {
+        Boolean b = null;
+        try {
+            b = model.process(input, choice);
+        } catch (ParserException e) {
+            e.printStackTrace();
+        }
+        if (b) {
                 result.setText("Formuła jest spełnialna!");
                 result.setFill(Color.GREEN);
             } else {
@@ -94,10 +101,10 @@ public class Controller {
             }
             lastFormula.setText(formula.getText());
             lastFormula.setStyle("-fx-text-fill: gray");
-        } else {
+        /*} else {
             result.setText("Wpisz poprawną formułę w CNF!");
             result.setFill(Color.ORANGE);
-        }
+        }*/
     }
 }
 
