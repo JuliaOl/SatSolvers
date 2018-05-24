@@ -31,6 +31,8 @@ public class Controller {
     @FXML
     private Button nnfBtn;
     @FXML
+    private Button dnfBtn;
+    @FXML
     private ChoiceBox solversBox;
     @FXML
     private MenuItem closeItem;
@@ -77,6 +79,13 @@ public class Controller {
         String input = formula.getText();
         String cnf = model.toCNF(input);
         formula.setText(input + "\n" + cnf);
+    }
+
+    @FXML
+    private void toDnf(ActionEvent event) {
+        String input = formula.getText();
+        String dnf = model.toDNF(input);
+        formula.setText(input + "\n" + dnf);
     }
 
     @FXML

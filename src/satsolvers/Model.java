@@ -1,5 +1,8 @@
 package satsolvers;
 
+import com.bpodgursky.jbool_expressions.Expression;
+import com.bpodgursky.jbool_expressions.parsers.ExprParser;
+import com.bpodgursky.jbool_expressions.rules.RuleSet;
 import jdd.sat.DimacsReader;
 import jdd.sat.Solver;
 import jdd.sat.gsat.GSATSolver;
@@ -16,25 +19,17 @@ import org.logicng.solvers.SATSolver;
 import java.io.IOException;
 
 public class Model {
-
-
-    final FormulaFactory f = new FormulaFactory();
-    final PropositionalParser p = new PropositionalParser(f);
-    //final PseudoBooleanParser p = new PseudoBooleanParser(f);
-    final SATSolver miniSat = MiniSat.miniSat(f);
-    final SATSolver cleaneLing = CleaneLing.full(f);
-    Solver solver2 = new GSATSolver(2000);
-    Solver walkSolver = new WalkSATSolver(2000, 0.02);
+    FormulaFactory f = new FormulaFactory();
+    PropositionalParser p = new PropositionalParser(f);
     DimacsReader dr;
-    //String stringFormula = "p cnf 6 3\n" + "1 -2 3 0\n" + "2 4 5 0\n" + "4 6 0";
-    //String stringFormula = "p cnf 3 1\n 1 -2 3 0";
-    //String stringFormula = "p cnf 1 2\n 1 0 -1 0";
-    //String stringFormula = "p cnf 2 3\n 1 0 -1 2 0 -2 0";
 
     public Boolean process(String in, String choice) throws ParserException {
-        /*boolean isCNF = checkCNF(input);
-        if (!isCNF)
-            input = toCNF(input);*/
+
+        SATSolver miniSat = MiniSat.miniSat(f);
+        SATSolver cleaneLing = CleaneLing.full(f);
+        Solver solver2 = new GSATSolver(2000);
+        Solver walkSolver = new WalkSATSolver(2000, 0.02);
+
         String input = toCNF(in);
         System.out.println("input aaa: "+input);
         if (input.equals("false"))
@@ -42,20 +37,15 @@ public class Model {
         else if (input.equals("true"))
             return true;
         else {
-            System.out.println("jestem po return w process");
-
+            //System.out.println("jestem po return w process");
             Formula formula = p.parse(input);
             Tristate result;
             Boolean boolResult = false;
-            // try {
-            //     Formula formula = p.parse(input);
-            //} catch (ParserException e) {
-            //   e.printStackTrace();
-            //}
             switch (choice) {
                 case "MiniSAT":
                     miniSat.add(formula);
                     result = miniSat.sat();
+                    System.out.println(result.toString());
                     if (result.toString().equals("TRUE")) boolResult = true;
                     else boolResult = false;
                     break;
@@ -66,7 +56,6 @@ public class Model {
                     else boolResult = false;
                     break;
                 case "GSATSolver":
-
                     setDimacs(formula);
                     solver2.setFormula(dr.getFormula());
                     int[] x = solver2.solve();
@@ -109,7 +98,7 @@ public class Model {
         }
     }
 
-    public Boolean checkCNF(String input) {
+    /*public Boolean checkCNF(String input) {
 
         Boolean isCnf = false;
         try {
@@ -126,13 +115,13 @@ public class Model {
             e.printStackTrace();
         }
         return isCnf;
-    }
+    }*/
 
     public String toCNF(String input) {
         String result = "nie mogę przekształcić";
         try {
-            final Formula formula = p.parse(input);
-            final Formula cnf = formula.cnf();
+            Formula formula = p.parse(input);
+            Formula cnf = formula.cnf();
 
             result = cnf.toString().replaceAll("\\$", "");
             //debug
@@ -154,12 +143,21 @@ public class Model {
     public String toNNF(String input) {
         String result = "nie mogę przekształcić";
         try {
-            final Formula formula = p.parse(input);
-            final Formula nnf = formula.nnf();
+            Formula formula = p.parse(input);
+            Formula nnf = formula.nnf();
             result = nnf.toString().replaceAll("\\$", "");
         } catch (ParserException e) {
             e.printStackTrace();
         }
+        return result;
+    }
+
+    public String toDNF(String input) {
+        String result = "nie mogę przekształcić";
+        input = input.replaceAll("~", "!");
+        Expression<String> f = ExprParser.parse(input);
+        Expression<String> dnf = RuleSet.toDNF(f);
+        result = dnf.toString().replaceAll("!", "~");
         return result;
     }
 }
