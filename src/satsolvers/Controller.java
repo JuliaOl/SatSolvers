@@ -10,6 +10,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.logicng.io.parsers.ParserException;
 
+import java.util.concurrent.TimeUnit;
+
 
 public class Controller {
     //satellite
@@ -17,8 +19,8 @@ public class Controller {
     //A & ~B & C cnf
 
     ObservableList<String> solversList = FXCollections.observableArrayList("MiniSAT",
-             "CleaneLing", "GSATSolver", "WalkSATSolver");
-    // "Glucose", "SAT4J", "PBLib", "OpenWBO"
+             "CleaneLing", "GSATSolver", "WalkSATSolver", "Glucose", "MiniCard");
+    // "SAT4J"
 
     @FXML
     private TextArea formula;
@@ -59,6 +61,7 @@ public class Controller {
     @FXML
     private void reset(ActionEvent event) {
         formula.setText("");
+        result.setText("");
     }
 
     @FXML
@@ -72,6 +75,7 @@ public class Controller {
         String input = formula.getText();
         String nnf = model.toNNF(input);
         formula.setText(input + "\n" + nnf);
+        result.setText("");
     }
 
     @FXML
@@ -79,6 +83,7 @@ public class Controller {
         String input = formula.getText();
         String cnf = model.toCNF(input);
         formula.setText(input + "\n" + cnf);
+        result.setText("");
     }
 
     @FXML
@@ -86,6 +91,7 @@ public class Controller {
         String input = formula.getText();
         String dnf = model.toDNF(input);
         formula.setText(input + "\n" + dnf);
+        result.setText("");
     }
 
     @FXML

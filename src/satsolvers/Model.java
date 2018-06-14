@@ -29,6 +29,8 @@ public class Model {
         SATSolver cleaneLing = CleaneLing.full(f);
         Solver solver2 = new GSATSolver(2000);
         Solver walkSolver = new WalkSATSolver(2000, 0.02);
+        SATSolver glucose = MiniSat.glucose(f);
+        SATSolver miniCard = MiniSat.miniCard(f);
 
         String input = toCNF(in);
         System.out.println("input aaa: "+input);
@@ -52,6 +54,20 @@ public class Model {
                 case "CleaneLing":
                     cleaneLing.add(formula);
                     result = cleaneLing.sat();
+                    if (result.toString().equals("TRUE")) boolResult = true;
+                    else boolResult = false;
+                    break;
+                case "Glucose":
+                    glucose.add(formula);
+                    result = glucose.sat();
+                    System.out.println(result.toString());
+                    if (result.toString().equals("TRUE")) boolResult = true;
+                    else boolResult = false;
+                    break;
+                case "MiniCard":
+                    miniCard.add(formula);
+                    result = miniCard.sat();
+                    System.out.println(result.toString());
                     if (result.toString().equals("TRUE")) boolResult = true;
                     else boolResult = false;
                     break;
